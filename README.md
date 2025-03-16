@@ -1,49 +1,67 @@
-# 라즈베리파이5로 홈서버 만들기
-24/7/365 가동하는 라즈베리파이5 웹서버 만들기 
+# 라즈베리파이5 홈서버 구축기
+부제: 24/7/365 가동하는 라즈베리파이5 웹서버 만들기 
 
 ## 개요
-기존 삼성 SW아카데미 팀프로젝트에서 지급받던 AWS EC2(t2.xLarge)를 반납하여 AWS freetier t2.micro를 사용하다가 적은 ssd로 인하여 리팩토링, 토이 프로젝트 개발이 불가능하다고 판단하여 개발하고자합니다.
-
-프로젝트의 READ ME는 하드웨어 측면과 소프트웨어 측면으로 나누어 작성합니다.
+기존 삼성 SW아카데미 팀프로젝트에서 지급받던 AWS EC2(t2.xLarge)를 반납하여 AWS freetier t2.micro를 사용하다가 적은 ssd로 인하여 리팩토링, 토이 프로젝트 개발이 불가능하다고 판단하여 진행했습니다.
 
 ## 문제 정의 
-![](image-4.png)
+<figure>
+    <img src="image-4.png" alt="Alt text" />
+</figure>
 
-기존 삼성 SW 아카데미에서 지급받은 AWS EC2 서버 스펙입니다.
 
-![](image-3.png)
+<figure>
+    <img src="image-3.png" alt="Alt text" />
+
+</figure>
 기존 프로젝트 리팩토링과 토이프로젝트를 진행하기 위해 무료로 사용할 수 있는 free tier의 스펙입니다. 
 
-30기가라는 저장용량과 일정 크레딧을 넘어갔을 때 비용이 청구되기 때문에 안정적으로 서버를 운영할 수 없다고 판단하여 개발을 시작합니다.
+30기가라는 적은 저장용량과 일정 크레딧을 넘어갔을 때 비용이 청구되기 때문에 안정적으로 서버를 운영할 수 없다고 판단하여 개발하게 되었습니다.
 
+개발 과정에 있었던 의사결정 과정을 하드웨어와 소프트웨어 측면으로 분리하여 리드미로 작성하였습니다.
 
-
-
+***
 ## 하드웨어 측면
 ### RasberryPi vs Intel N100
-일반적으로 집에서 사용하는 홈서버는 라즈베리파이와 intel N100 두 가지로 나누어지지만 완본체인 
-    1. Intel N100은 20만원대 중반(RAM 8g, SSD 256g 기준)
-    2. RasberryPi5는 10만원대 초반 (RAM 8g 기준)
+일반적으로 집에서 사용하는 홈서버를 개발할 때 stackoverflow, naver blog, okky 등 커뮤니티에서는 Intel의 N100, RasberryPi5를 이용한다고 하여 비용적인 측면에서 비교해보았습니다.
 
-RasberryPi5에 저장장치를 연결하여 공학적인 측면으로 개발해보고자 선택하게 되었습니다.
+    1. Intel N100의 가격: 20만원대 중반(RAM 8g, SSD 256g 기준)
+    2. RasberryPi5의 가격: 10만원대 초반 (RAM 8g 기준)
+
+**라즈베리파이는 저장장치가 없기 때문에 위에 비용에서 저장장치 비용을 추가하면 완본체인 N100과 비교하였을 때 가격적인 장점은 없다는 것을 파악할 수 있습니다.**
+
+하지만 메인프레임에서 클라우드 컴퓨터로 이전되고 있는 현재 메인프레임 서버의 구축 방법을 학습해보고싶어 SSD에 운영체제를 복사하는 정말 기초적인 것부터 구현하고자 하였습니다.
+
 추가적으로 일반적인 AWS에 사용중인 Devian 시스템에 포함된 apt(Advanced Package Tool)을 하나씩 설치해가며 각 프로그램들이 어떤 역할을 위해서 사용하는지 학습하고자하였습니다.
 
-실제로 RasberryPi5는 기존 RasberryPi4와 달리 micro SD칩이 아닌 SSD를 장착할 수 있었습니다. 
+
 
 ### NVME, SATA
+RasberryPi5는 기존 RasberryPi4와 달리 micro SD칩이 아닌 SSD를 장착할 수 있었습니다. 따라서 micro SD 카드와 SSD는 read/write 속도 측면에서 엄청난 차이를 보이기 때문에 PCIe 를 구매하여 SSD를 연결하여 사용하고자 하였습니다. 
 
-NVMe PCIe 3.0 SSD read 속도는 최대 약 3500MB/s, PCIe 4.0 SSD는 최대 7500MB/s에 달하는 반면, SATA SSD는 약 500~550MB/s 정도의 전송 속도에 달합니다. (Kingston Technology 발췌) NAS 보다는 실시간 요청과 웹서버의 목적이었기 때문에 read/write 속도가 높은 NVME SSD 512g로 결정하였습니다.
+SSD는 크게 NVME, SATA 방식으로 나누어져 있습니다. 현재 프로젝트에서 가장 중요한건 속도 측면이기에 속도 측면에서 조사한 결과
+
+>NVMe PCIe 3.0 SSD read 속도는 최대 약 3500MB/s, PCIe 4.0 SSD는 최대 7500MB/s에 달하는 반면, SATA SSD는 약 500~550MB/s 정도의 전송 속도에 달합니다. (Kingston Technology 발췌) NAS 보다는 실시간 요청과 웹서버의 목적이었기 때문에 read/write 속도가 높은 NVME SSD 512g로 결정하였습니다.
 
 
 칩셋에 SSD를 PCIe 연결하여 512 NVME SSD를 부착하였습니다.
 
-![alt text](image-8.png)
-![alt text](image-7.png)
+<figure>
+    <img src="image-7.png" alt="Alt text" />
+    <figcaption>라즈베리파이 관련 장비 구매</figcaption>
+</figure>
 
+*** 
 
 ## 소프트웨어측면
+RasberryPi에 모니터를 직접 부착하면 소프트웨어 측면에서 고려할 부분이 없지만 현재 사용 전력랑을 최대한 줄여야하기 때문에 모니터 없이 구현하고자 하였습니다. 또한 기존 클라우드 컴퓨터에 ssh로 접속하는 것 처럼 구현하고자하여 생긴 소프트웨어 측면의 의사결정 과정입니다.
+
 OS: Ubuntu 24.04 LTS 버전으로 개발을 진행하였습니다.
-![alt text](image-10.png)
+<figure>
+    <img src="image-10.png" alt="Alt text" />
+    <figcaption>부착한 SSD에 ubuntu OS 복사를 위한 Imager</figcaption>
+</figure>
+
 
 ### SSH 접속
 
@@ -62,16 +80,24 @@ sudo systemctl start ssh
 ```
 sudo systemctl status ssh
 ```
-![alt text](image-11.png)
-ssh active 설정
+
+<figure>
+    <img src="image-11.png" alt="Alt text" />
+    <figcaption>ssh active 설정</figcaption>
+</figure>
+
 ```
  ssh rasberrypi_device_name@rasberrypi_device_ip   
 ``` 
 
-![alt text](image-12.png)
-**같은 네트워크를 사용중일 때 ssh 접근을 완료하였습니다.**
+<figure>
+    <img src="image-12.png" alt="Alt text" />
+    <figcaption>같은 네트워크를 사용중일 때 ssh 접근을 완료하였습니다.</figcaption>
+</figure>
+
 ***
-### 같은 subnet의 한계 
+
+#### 같은 subnet의 한계 
 AWS와 같은 클라우드 컴퓨터의 장점은 언제 어디에서나 접속을 할 수 있다는 점입니다. 하지만 위와 같이 개발한다면 외부 IP에서 ssh 접근하는 경우 NAT에서 접근이 막혀 ssh 접속요청들이 중간에서 유실되게 되어 EC2 인스턴스처럼 사용할 수 없다는 한계가 존재합니다.
 
 따라서 외부에서 SSH 요청을 라우터에서 포트포워딩 할 수 있게 하여 외부에서 접근하는 ssh 요청을 라즈베리파이까지 보내야합니다.
@@ -83,7 +109,10 @@ AWS와 같은 클라우드 컴퓨터의 장점은 언제 어디에서나 접속�
 ```
 
 KT사가 지원하는 ip에 접근하여 사용하고자 하는 포트 포워딩 설정을 해줍니다.
-![alt text](image-14.png)
+<figure>
+    <img src="image-14.png" alt="Alt text" />
+    <figcaption>KT사 라우터 포트포워딩 설정 페이지</figcaption>
+</figure>
 
 위와 같이 설정하면 아래 명령어를 통하여 ssh로 외부에서 접근할 수 있게 됩니다.
 ```
@@ -107,7 +136,11 @@ ssh -p port_num rasberrypi_device_name@rasberrypi_device_ip
 ```
 ssh-keygen -t ed25519 -C "My_Email"
 ```
-![alt text](image-15.png)
+<figure>
+    <img src="image-15.png" alt="Alt text" />
+    <figcaption>개인키와 공개키 생성</figcaption>
+</figure>
+
 이메일로 개인키를 생성하였고 .pub이라는 공개키가 동시에 생성됩니다. 
 이 공개키를 라즈베라파이의 authorized_keys에 복사하여 공개키에 맞는 개인키를 가진 디바이스에서만 접속할 수 있도록 설정하였습니다.
 
