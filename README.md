@@ -1,6 +1,6 @@
 # 라즈베리파이5 홈서버 구축기
 부제: 24/7/365 가동하는 라즈베리파이5 웹서버 만들기 
-![완성된 RasberryPi5 webserver](image.png){: width="450" height="500"}
+<img src="image.png" width="450" height="500">
 ## 개요
 기존 삼성 SW아카데미 팀프로젝트에서 지급받던 AWS EC2(t2.xLarge)를 반납하여 AWS freetier t2.micro를 사용하다가 적은 ssd로 인하여 리팩토링, 토이 프로젝트 개발이 불가능하다고 판단하여 진행했습니다.
 
