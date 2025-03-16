@@ -62,6 +62,7 @@ OS: Ubuntu 24.04 LTS 버전으로 개발을 진행하였습니다.
     <figcaption>부착한 SSD에 ubuntu OS 복사를 위한 Imager</figcaption>
 </figure>
 
+***
 
 ### SSH 접속
 
@@ -94,8 +95,6 @@ sudo systemctl status ssh
     <img src="image-12.png" alt="Alt text" />
     <figcaption>같은 네트워크를 사용중일 때 ssh 접근을 완료하였습니다.</figcaption>
 </figure>
-
-***
 
 #### 같은 subnet의 한계 
 AWS와 같은 클라우드 컴퓨터의 장점은 언제 어디에서나 접속을 할 수 있다는 점입니다. 하지만 위와 같이 개발한다면 외부 IP에서 ssh 접근하는 경우 NAT에서 접근이 막혀 ssh 접속요청들이 중간에서 유실되게 되어 EC2 인스턴스처럼 사용할 수 없다는 한계가 존재합니다.
