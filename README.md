@@ -6,12 +6,12 @@
 
 ## 문제 정의 
 <figure>
-    <img src="image-4.png" alt="Alt text" />
+    <img src="./img/image-4.png" alt="Alt text" />
 </figure>
 
 
 <figure>
-    <img src="image-3.png" alt="Alt text" />
+    <img src="./img/image-3.png" alt="Alt text" />
 
 </figure>
 기존 프로젝트 리팩토링과 토이프로젝트를 진행하기 위해 무료로 사용할 수 있는 free tier의 스펙입니다. 
@@ -47,7 +47,7 @@ SSD는 크게 NVME, SATA 방식으로 나누어져 있습니다. 현재 프로�
 칩셋에 SSD를 PCIe 연결하여 512 NVME SSD를 부착하였습니다.
 
 <figure>
-    <img src="image-7.png" alt="Alt text" />
+    <img src="./img/image-7.png" alt="Alt text" />
     <figcaption>라즈베리파이 관련 장비 구매</figcaption>
 </figure>
 
@@ -58,7 +58,7 @@ RasberryPi에 모니터를 직접 부착하면 소프트웨어 측면에서 고�
 
 OS: Ubuntu 24.04 LTS 버전으로 개발을 진행하였습니다.
 <figure>
-    <img src="image-10.png" alt="Alt text" />
+    <img src="./img/image-10.png" alt="Alt text" />
     <figcaption>부착한 SSD에 ubuntu OS 복사를 위한 Imager</figcaption>
 </figure>
 
@@ -83,7 +83,7 @@ sudo systemctl status ssh
 ```
 
 <figure>
-    <img src="image-11.png" alt="Alt text" />
+    <img src="./img/image-11.png" alt="Alt text" />
     <figcaption>ssh active 설정</figcaption>
 </figure>
 
@@ -92,7 +92,7 @@ sudo systemctl status ssh
 ``` 
 
 <figure>
-    <img src="image-12.png" alt="Alt text" />
+    <img src="./img/image-12.png" alt="Alt text" />
     <figcaption>같은 네트워크를 사용중일 때 ssh 접근을 완료하였습니다.</figcaption>
 </figure>
 
@@ -109,7 +109,7 @@ AWS와 같은 클라우드 컴퓨터의 장점은 언제 어디에서나 접속�
 
 KT사가 지원하는 ip에 접근하여 사용하고자 하는 포트 포워딩 설정을 해줍니다.
 <figure>
-    <img src="image-14.png" alt="Alt text" />
+    <img src="./img/image-14.png" alt="Alt text" />
     <figcaption>KT사 라우터 포트포워딩 설정 페이지</figcaption>
 </figure>
 
@@ -136,7 +136,7 @@ ssh -p port_num rasberrypi_device_name@rasberrypi_device_ip
 ssh-keygen -t ed25519 -C "My_Email"
 ```
 <figure>
-    <img src="image-15.png" alt="Alt text" />
+    <img src="./img/image-15.png" alt="Alt text" />
     <figcaption>개인키와 공개키 생성</figcaption>
 </figure>
 
